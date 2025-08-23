@@ -1,2 +1,3 @@
-<h1 text-align="center"></h1>
+<h1 align="center">Mini Shell</h1>
+
 
