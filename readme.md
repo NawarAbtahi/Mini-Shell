@@ -1,13 +1,14 @@
 <h1 align="center">Mini Shell</h1>
 
-A mini shell in c with built-in commands and external commands accessibility.
+A mini shell in C with built-in commands and support for external commands.
 
-#Built-in commands
+## Built-in commands
 - cd
 - getdir
-- lsf (works as ls)
-- clscr (clears screen)
+- lsf (works like ls)
+- clscr (clears the screen)
 - --help
 - quit (exits the shell)
+
 
 
