@@ -3,8 +3,10 @@
 
 char *shell_read_line();
 char **shell_split_line(char *line);
-int help(char **args);
+int shell_launch(char **args);
 int shell_execute(char **args);
+
+int help(char **args);
 
 int num_of_builtin_func();
 
@@ -126,25 +128,42 @@ int help(char **args){
   return 1;
 }
 
+int shell_launch(char **args){
+  pid_t pid, wpid;
+  int status;
+
+  pid = fork();
+
+  if(pid == 0){
+    if(execvp(args[0], args) == -1){
+      perror("lsh");
+    }
+    exit(EXIT_FAILURE);
+  }
+
+  else if(pid < 0){
+    perror("lsh");
+  }
+
+  else{
+    do{
+      wpid = waitpid(pid, &status, WUNTRACED);
+    }while(!WIFEXITED(status) && !WIFSIGNALED(status));
+  }
+
+  return 1;
+}
+
 int shell_execute(char **args){
   if(args[0] == NULL){
     return 1;
   }
  
-  int wrong_command = 0;
 
   for(int i = 0; i < num_of_builtin_func(); i++){
     if((strcmp(args[0], builtin_str[i])) == 0){
       return builtin_func[i](args);
     }
-    else{
-      wrong_command = 1;
-    }
   }
-
-  if(wrong_command){
-    printf("No commands found with '%s'\n",args[0]);
-    printf("Type '--help' to see shell's commands.\n");
-  }
-  return 1;  
+  return shell_launch(args);  
 }
